@@ -5,17 +5,42 @@
  *  @desc the home page
  */
 
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Container, Jumbotron, Button, Modal } from "react-bootstrap";
+import axios from "axios";
 
 import { Page } from "../components/hoc";
 import { useModal } from "../hooks";
 
 const Home: React.FC = () => {
   /*
+   *  Test data
+   */
+  const [data, setData] = useState(null) as any;
+
+  /*
    *  Example modal API
    */
   const modal = useModal();
+
+  /*
+   *  Get data async function
+   */
+  const getData = useCallback(async () => {
+    try {
+      const response = await axios.get("/api/test");
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [setData]);
+
+  /*
+   *  On mount get test data
+   */
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   /*
    *  Render
@@ -32,9 +57,7 @@ const Home: React.FC = () => {
 
       {/* Page content */}
       <div id="content">
-        <Container>
-          <p>This is the home page!</p>
-        </Container>
+        <Container>{data ? <p>{data.text}</p> : null}</Container>
       </div>
 
       {/* Example modal */}

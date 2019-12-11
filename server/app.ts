@@ -18,6 +18,13 @@ app.use(express.json());
 // Register routes
 app.use("/api/users", userRoutes);
 
+// Test route
+app.get("/api/test", (req: Request, res: Response) => {
+  res.json({
+    text: "This text came from the server!"
+  });
+});
+
 // Handle React routing, return all requests to React app in production
 app.get("*", (req: Request, res: Response) => {
   res.sendFile(path.resolve(__dirname, "public/index.html"));
